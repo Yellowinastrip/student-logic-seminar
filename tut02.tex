@@ -1,0 +1,183 @@
+\documentclass{article}
+\usepackage{babel}[english,czech]
+\usepackage{inputenc}[utf8]
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{bussproofs}
+
+\theoremstyle{definition}
+\newtheorem{thrm}{Theorem}
+\newtheorem{excs}[thrm]{Exercise}
+\newtheorem{lemm}[thrm]{Lemma}
+\newtheorem{fact}[thrm]{Fact}
+\newtheorem{exmp}[thrm]{Example}
+\newtheorem{prbl}[thrm]{Open problem}
+\newtheorem{opin}[thrm]{Opinion}
+\newtheorem{defi}[thrm]{Definition}
+\newtheorem{defip}[thrm]{``Definition"}
+
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\renewcommand{\P}{\textbf{P}}
+\newcommand{\NP}{\textbf{NP}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\coNP}{\textbf{coNP}}
+\newcommand{\PA}{\text{PA}}
+\newcommand{\Land}{\bigwedge}
+\newcommand{\Lor}{\bigvee}
+\newcommand{\w}{\textbf{w}}
+\renewcommand{\k}{\textbf{k}}
+
+\newcommand{\arrow}{\longrightarrow}
+
+\begin{document}
+\section*{Theories of arithmetic}
+
+\subsection*{Rock bottom}
+
+\begin{defi}[Robinson's Q]
+    Let $L_Q=\{0,S,+,\cdot\}$ and let $Q$ be an $L_Q$-theory with the following axioms:
+    \begin{align}
+        &\lnot S(x) = 0\\
+        &S(x)=S(y) \to x=y\\
+        &x\neq 0 \to (\exists y)(S(y)=x)\\
+        &x+0 = x \\
+        & x+S(y) = S(x+y)\\
+        & x \cdot 0 = 0\\
+        & x \cdot S(y) =x\cdot y + x 
+    \end{align}
+\end{defi}
+
+\begin{excs}
+    Show that $Q \vdash S(0) + S(0) = S(S(0)).$
+\end{excs}
+
+\begin{excs}
+    Show that $\NN$ as an $L_Q$-structure can be embedded into every model of $Q$.
+\end{excs}
+
+\begin{excs}
+    Let $Q_\leq$ be the $L_Q\cup\{\leq\}$-theory extending $Q$ by
+    \[x \leq y \leftrightarrow (\exists z) x+z = y,\]
+    show that for every $L_Q$-sentence $\varphi$ we have
+    \[Q \vdash \varphi \iff Q_\leq \vdash \varphi,\]
+    this property is called \emph{conservativity} of $Q_\leq$ over $Q$.
+\end{excs}
+
+\begin{excs}
+    Show that $Q \nvdash x+y = y+x$.
+\end{excs}
+    
+\subsection*{Overshooting}
+
+\begin{defi}
+    Let $L_\PA=\{0,1,+,\cdot, \leq \}$ and $\PA$ be an $L_\PA$-theory axiomatized by $Q_\leq$ and the scheme of \emph{induction}. That is, for every $L_\PA$-formula $\varphi(x)$ the following is an axiom:
+    \[(\varphi(0) \land (\forall x)(\varphi(x)\to \varphi(x+1)))\to (\forall x)(\varphi(x))\]
+\end{defi}
+
+\begin{excs}
+    Show that $\PA \vdash x+y = y+x$.
+\end{excs}
+
+\begin{fact}
+    Let $\text{ZF}_{fin}$ be the theory of $\text{ZF}$ with the axiom of infinity replaced by its negation. 
+    
+    Then $\text{ZF}_{fin}$ and $\PA$ are bi-interpretable, meaning that they prove the same statement if we translate the non-logical symbols using their definition in the other language.
+\end{fact}
+
+\begin{opin}[Harvey Friedman's grand conjecture]
+    Every theorem published in the Annals of Mathematics whose statement involves only finitary mathematical objects (i.e., what logicians call an arithmetical statement) can be proved in a subsystem of $\PA$.
+\end{opin}
+
+\subsection*{Homing in}
+
+\begin{defi}
+    The set of \emph{bounded} $L_\PA$-formulas, denoted $\Delta_0$, is the least set closed under propositional connectives, which contains open formulas, and for each $\varphi(x)\in \Delta_0$ and an $L_\PA$-term $t$ which does not contain the variable $x$, we have
+    \begin{align*}
+        (\exists x)(x \leq t \land \varphi(x))&\in\Delta_0,\\
+        (\forall x)(x \leq t \to \varphi(x))&\in\Delta_0.
+    \end{align*}
+    These formulas are usually denoted using \emph{bounded quantifiers}
+    \begin{align*}
+        &(\exists x \leq t)(\varphi(x))\\
+        &(\forall x \leq t)(\varphi(x)).
+    \end{align*}
+\end{defi}
+
+\begin{excs}
+    Let $\psi\in\Delta_0$ and $\NN \models (\forall x)(\exists y)\psi(x,y)$, show that there is an algorithm which given $x$ computes $y$ such that $\psi(x,y)$. Can you say anything about the complexity of such an algorithm?
+\end{excs}
+
+\begin{defi}
+    $I\Delta_0$ is an $L_\PA$-theory extending $Q_\leq$ by the scheme of \emph{bounded induction}. That is for each $\varphi(x)\in \Delta_0$ there is an axiom:
+    \[(\varphi(0) \land (\forall x)(\varphi(x)\to \varphi(x+1)))\to (\forall x)(\varphi(x)).\]
+\end{defi}
+
+\begin{fact}
+    $I\Delta_0$ proves the (fifteen) axioms of positive parts of discretely ordered rings: $\leq$ is a linear order, commutativity of $+$ and $\cdot$, neutrality of $0$ and $1$, distributivity, $0 \leq x \leq 1 \to (x=0 \lor x = 1)$, etc., which are collectively known as $\PA^-$.
+\end{fact}
+
+\begin{defi}
+    We say a theory $I\Delta_0$ proves the totality of a function $f(-)$ iff there is a formula $\varphi(\overline x,y)$ such that it holds $\NN \models \varphi(\overline x,y) \leftrightarrow f(\overline x)=y$ and  
+    \[I\Delta_0\vdash (\forall x)(\exists y)\varphi(x,y).\]
+\end{defi}
+
+\begin{excs}
+    Prove that $I\Delta_0$ proves the totality of \[x\dot - y = \begin{cases}
+        x-y & x>y\\
+        0 & x\leq y,
+    \end{cases}\] and \[\lfloor x/2 \rfloor=
+    \begin{cases}
+        x/2 & x\text{ is even}\\
+        (x-1)/2 & x\text{ is odd}.
+    \end{cases}\]
+\end{excs}
+
+\begin{thrm}
+    Every nonstandard model of $I\Delta_0$ has order type $\NN + \QQ \cdot \ZZ$.
+\end{thrm}
+
+\begin{fact}[Tennenbaum, `No nonstandard calculator theorem']
+    Let \[M=(\{0,1\}^*, \oplus, \otimes,0,1, \leq^M)\] be a model of $I\Delta_0$, then both $x, y \mapsto x\oplus y$ and $x,y \mapsto x\otimes y$ are not recursive, there is no algorithm that computes them.
+\end{fact}
+
+\subsection*{Parikh's Theorem}
+
+\begin{defi}
+    Let $M,N\models \PA^-$, we say $M$ is an \emph{initial segment} of $N$, and that $N$ is an \emph{end extension} of $M$, denoted $M \subseteq_e N$, if $M\subseteq N$ and for every $a\in M, b\in N$ we have $N \models b<a$ implies $b\in M$. 
+\end{defi}
+
+\begin{excs}
+    Let $M,N\models \PA^{-}$, $M\subseteq_e N$, then for every $\varphi(\overline x,\overline y)\in \Delta_0$ and $\overline m \in M$ we have
+    \[M\models \varphi(\overline m) \iff N \models \varphi(\overline m).\]
+\end{excs}
+
+\begin{excs}
+    Let $M,N\models \PA^{-}$, $M\subseteq_e N$. If $N\models I\Delta_0$ then $M\models I\Delta_0$.
+\end{excs}
+
+\begin{thrm}[Parikh]
+    Let $\varphi(x,y)\in\Delta_0$. If
+    \[I\Delta_0 \vdash (\forall x)(\exists y)\varphi(x,y),\]
+    then there is an $L_{PA}$-term $t$ not containing $y$ such that
+    \[I\Delta_0 \vdash (\forall x)(\exists y\leq t)\varphi(x,y).\]
+\end{thrm}
+
+\begin{excs}
+   Assume that $I\Delta_0\vdash (\forall x)(\exists y)\varphi(x,y)$, can you find an algorithm which given $x$ finds a $y$ such that $\NN\models\varphi(x,y)$, can we bound the complexity of this algorithm?
+\end{excs}
+
+\begin{fact}[Bennet, Pudlák]
+    There is an $\Delta_0$ formula $\text{exp}(x,y,z)$ which has the property \[\NN\models  x^y = z \leftrightarrow \text{exp}(x,y,z)\] and $I\Delta_0$ proves its recursive properties, such as \[(\text{exp}(x,y,z)\land \text{exp}(x,y+1,z')) \to (z\cdot x = z').\]
+\end{fact}
+
+\begin{excs}
+    Show, that $I\Delta_0$ cannot prove that the exponential function is total.
+\end{excs}
+
+
+
+\end{document}
